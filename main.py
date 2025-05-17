@@ -1,11 +1,13 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import FastAPI, HTTPException, Depends
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from db import User, SessionLocal
+from pydantic import BaseModel
+from typing import List
 import os
 
 app = FastAPI()
-
-items = {}
 
 app.add_middleware(
     CORSMiddleware,
@@ -16,34 +18,71 @@ app.add_middleware(
 )
 
 
-@app.get("/items/{item_id}")
-async def read_item(item_id: int):
-    if item_id in items:
-        return {"item_id": item_id, "value": items[item_id]}
-    return JSONResponse(status_code=404, content={"error": "Item not found"})
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 
-@app.post("/items/")
-async def create_item(request: Request):
-    data = await request.json()
-    item_id = data.get("item_id")
-    value = data.get("value")
-    if item_id is None or value is None:
-        return JSONResponse(status_code=400, content={"error": "item_id and value required"})
-    items[item_id] = value
-    return {"item_id": item_id, "value": value}
+class UserCreate(BaseModel):
+    name: str
+    email: str
 
 
-@app.get("/items/")
-def list_items():
-    return [{"item_id": k, "value": v} for k, v in items.items()]
+class UserRead(BaseModel):
+    id: int
+    name: str
+    email: str
 
-@app.delete("/items/{item_id}")
-async def delete_item(item_id: int):
-    if item_id in items:
-        del items[item_id]
-        return {"message": "Item deleted"}
-    return JSONResponse(status_code=404, content={"error": "Item not found"})       
+    class Config:
+        orm_mode = True
+
+
+@app.post("/users/", response_model=UserRead)
+def create_user(user: UserCreate, db: Session = Depends(get_db)):
+    db_user = User(name=user.name, email=user.email)
+    db.add(db_user)
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+@app.get("/users/", response_model=List[UserRead])
+def read_users(db: Session = Depends(get_db)):
+    return db.query(User).all()
+
+
+@app.get("/users/{user_id}", response_model=UserRead)
+def read_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+
+
+@app.put("/users/{user_id}", response_model=UserRead)
+def update_user(user_id: int, user: UserCreate, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    db_user.name = user.name
+    db_user.email = user.email
+    db.commit()
+    db.refresh(db_user)
+    return db_user
+
+
+@app.delete("/users/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = db.query(User).filter(User.id == user_id).first()
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    db.delete(db_user)
+    db.commit()
+    return {"detail": "User deleted"}
+
 
 @app.get("/")
 def serve_frontend():
