@@ -11,4 +11,11 @@ Started learning new programming concepts with **Python** and **FastAPI**.
     - Handling requests and responses
     - Using path and query parameters
 
+- Tried to learn about sqlalchemy 
+- database connection error tried to fix
+- have to work on more on databases 
+
+**Have to upgrade FastAPI concepts**
+
+
 
