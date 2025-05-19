@@ -1,0 +1,13 @@
+
+# Logs
+logs/
+*.log
+
+.env
+.env.local
+
+__pycache__/
+*.py[cod]   
+*.pyo
+*.pyd
+
