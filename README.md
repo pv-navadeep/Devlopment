@@ -19,3 +19,6 @@ Started learning new programming concepts with **Python** and **FastAPI**.
 
 
 
+**Date:** 19-05-2025
+
+Today Goal : Creating a Books Management(CRUD Operations)
