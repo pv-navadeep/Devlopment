@@ -21,15 +21,17 @@ Started learning new programming concepts with **Python** and **FastAPI**.
 
 **Date:** 19-05-2025
 
-Today Goal : Creating a Books Management(CRUD Operations)
-- Created a Book Management 
-- implemented Create, Retrive, Update, Delete functionalities
-- used InMemory Database
-- learned HTTP status codes,HTTP responses and implemented 
+**Today's Goal:** Implement a Books Management system (CRUD Operations)
 
+- Developed a Book Management application.
+- Implemented Create, Retrieve, Update, and Delete functionalities.
+- Used an in-memory database for initial testing.
+- Learned about HTTP status codes and responses, and applied them in the project.
 
-**Next Steps**
-- create a database using  SQLAlchemy
-- have to learn in depth of SQLAlchemy
+**Next Steps** (Completed):
+
+- Set up a database using SQLAlchemy.
+- Explored SQLAlchemy in  depth.
+- Created and managed books using an SQLite database.
 
 
