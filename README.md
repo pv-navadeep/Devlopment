@@ -35,3 +35,18 @@ Started learning new programming concepts with **Python** and **FastAPI**.
 - Created and managed books using an SQLite database.
 
 
+**Date:**  20-05-2025
+
+**Today's Goal:** Understand the Pydantic library in depth
+
+Explored Pydantic models for data validation and parsing.
+Learned how to define request and response schemas using Pydantic.
+Practiced using type hints and field constraints.
+Understood error handling and validation messages in FastAPI with Pydantic.
+Experimented with nested models and custom data types.
+Next Steps:
+
+Explore advanced Pydantic features (validators, custom types).
+Integrate Pydantic models with SQLAlchemy models.
+Handle complex data structures in API requests and response
+
