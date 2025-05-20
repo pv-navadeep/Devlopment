@@ -49,4 +49,4 @@ async def get_current_user(token: str = Depends(oauth2_bearer), db: db_dependenc
     except JWTError:
         raise credentials_exception
 
-user_dependency = Annotated[User, Depends(get_current_user)]        
+user_depe        

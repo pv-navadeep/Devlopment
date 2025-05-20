@@ -47,6 +47,5 @@ async def get_current_user(token: str = Depends(oauth2_bearer), db: db_dependenc
             raise credentials_exception
         return db.query(User).filter(User.username == username, User.id == user_id).first()
     except JWTError:
-        raise credentials_exception
 
-user_dependency = Annotated[User, Depends(get_current_user)]        
+        

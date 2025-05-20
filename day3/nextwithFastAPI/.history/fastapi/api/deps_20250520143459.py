@@ -45,8 +45,11 @@ async def get_current_user(token: str = Depends(oauth2_bearer), db: db_dependenc
         user_id: int = payload.get("user_id")
         if username is None or user_id is None:
             raise credentials_exception
-        return db.query(User).filter(User.username == username, User.id == user_id).first()
+            
+        
+           
     except JWTError:
         raise credentials_exception
-
-user_dependency = Annotated[User, Depends(get_current_user)]        
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
